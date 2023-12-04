@@ -2,6 +2,11 @@ const form = document.getElementById("room-name-form");
 const roomNameInput = document.getElementById("room-name-input");
 const container = document.getElementById("video-container");
 
+let room;
+document.getElementById("toggle-audio-btn").style.display = "none";
+document.getElementById("toggle-video-btn").style.display = "none";
+document.getElementById("leave-call-btn").style.display = "none";
+
 const startRoom = async (event) => {
   // prevent a page reload when a user submits the form
   event.preventDefault();
@@ -28,6 +33,10 @@ const startRoom = async (event) => {
   handleConnectedParticipant(room.localParticipant);
   room.participants.forEach(handleConnectedParticipant);
   room.on("participantConnected", handleConnectedParticipant);
+  document.querySelector(".btn-group").style.display = "block";
+  document.getElementById("toggle-audio-btn").style.display = "inline-block";
+  document.getElementById("toggle-video-btn").style.display = "inline-block";
+  document.getElementById("leave-call-btn").style.display = "inline-block";
 
   // handle cleanup when a participant disconnects
   room.on("participantDisconnected", handleDisconnectedParticipant);
@@ -70,6 +79,8 @@ const handleTrackPublication = (trackPublication, participant) => {
   trackPublication.on("subscribed", displayTrack);
 };
 
+
+
 const handleDisconnectedParticipant = (participant) => {
   // stop listening for this participant
   participant.removeAllListeners();
@@ -79,11 +90,57 @@ const handleDisconnectedParticipant = (participant) => {
 };
 
 const joinVideoRoom = async (roomName, token) => {
-  // join the video room with the Access Token and the given room name
-  const room = await Twilio.Video.connect(token, {
-    room: roomName,
-  });
-  return room;
+  // Join the video room with the Access Token and the given room name
+  room = await Twilio.Video.connect(token, { room: roomName });
+  return room; 
 };
 
+
+
 form.addEventListener("submit", startRoom);
+
+const toggleAudio = () => {
+  if (room) {
+    const audioTracks = Array.from(room.localParticipant.audioTracks.values());
+    audioTracks.forEach((trackPublication) => {
+      if (trackPublication.track) {
+        trackPublication.track.enable(!trackPublication.track.isEnabled);
+      }
+    });
+  } else {
+    alert('Room is undefined'); // Alert for undefined room
+  }
+};
+
+// Adding event listener to the toggle audio button
+document.getElementById("toggle-audio-btn").addEventListener("click", toggleAudio);
+
+const toggleVideo = () => {
+  if (room) {
+    const videoTracks = Array.from(room.localParticipant.videoTracks.values());
+    videoTracks.forEach((trackPublication) => {
+      if (trackPublication.track) {
+        const track = trackPublication.track;
+        track.isEnabled ? track.disable() : track.enable();
+      }
+    });
+  } else {
+    alert('Room is undefined'); // Alert for undefined room
+  }
+};
+
+// Adding event listener to the toggle video button
+document.getElementById("toggle-video-btn").addEventListener("click", toggleVideo);
+
+const leaveCall = () => {
+  if (room) {
+    room.disconnect();
+    window.location.href = '/'; // Redirect to the root page
+  } else {
+    alert('Room is undefined'); // Alert for undefined room
+  }
+};
+
+// Adding event listener to the leave call button
+document.getElementById("leave-call-btn").addEventListener("click", leaveCall);
+

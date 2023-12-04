@@ -1,0 +1,17 @@
+#video-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 400px;
+    background-color: #f0f0f0;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+  
+  @media (max-width: 768px) {
+    #video-container {
+      height: 300px;
+    }
+  }
+  

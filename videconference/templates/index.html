@@ -3,15 +3,39 @@
   <head>
     <meta charset="utf-8" />
     <title>Twilio Video Demo</title>
-    <!-- Twilio Video CDN -->
-    <script src="https://sdk.twilio.com/js/video/releases/2.15.2/twilio-video.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/styles.css"/>
+
+    <style>
+      /* Additional styles can be added here */
+    </style>
   </head>
   <body>
-    <form id="room-name-form">
-      Enter a Room Name to join: <input name="room_name" id="room-name-input" />
-      <button type="submit">Join Room</button>
-    </form>
-    <div id="video-container"></div>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <form id="room-name-form">
+            <div class="form-group">
+              <label for="room-name-input">Enter a Room Code to join:</label>
+              <input type="text" class="form-control" name="room_name" id="room-name-input">
+            </div>
+            <button type="submit" class="btn btn-primary">Join Room</button>
+          </form>
+          <div id="video-container" class="mt-4"></div>
+          <div class="mt-3">
+            <div class="btn-group" role="group" aria-label="Call Controls" style="display: none;">
+              <button id="toggle-audio-btn" type="button" class="btn btn-secondary">Toggle Audio</button>
+              <button id="toggle-video-btn" type="button" class="btn btn-secondary">Toggle Video</button>
+              <button id="leave-call-btn" type="button" class="btn btn-danger">Leave Call</button>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Twilio Video CDN -->
+    <script src="https://sdk.twilio.com/js/video/releases/2.15.2/twilio-video.min.js"></script>
     <script src="static/main.js"></script>
   </body>
 </html>

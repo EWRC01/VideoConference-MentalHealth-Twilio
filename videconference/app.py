@@ -44,7 +44,7 @@ def get_access_token(room_name):
 # Create a route that just returns "In progress"
 @app.route("/")
 def serve_homepage():
-    return "In progress!"
+    return render_template("index.html")
 
 
 @app.route("/join-room", methods=["POST"])
